@@ -170,7 +170,6 @@ void *DrawnNumbers(void *ptr)
             for (std::map<int, Server::ClientInfo *>::iterator it = server->map.begin(); it != server->map.end(); ++it)
             {
                 Server::ClientInfo *ci = (it->second);
-                // ci->status = Status::CLIENT_READY_TO_PLAY;
                 if (ci->status != Status::CLIENT_READY_TO_PLAY)
                 {
 
@@ -211,20 +210,20 @@ void Server::MainLoop()
 {
     pthread_t threads[100];
     int i = 0;
+    thread_args_1 t_args;
+    t_args.server = this;
+    if (pthread_create(&threads[i++], NULL, DrawnNumbers, (void *)&t_args) != 0)
+        printf("Failed to create thread\n");
     for (;;)
     {
         int clientSocket = this->Server::WaitConnection();
         try
         {
-            thread_args_1 t_args;
             t_args.clientSocket = clientSocket;
-            t_args.server = this;
 
             if (pthread_create(&threads[i++], NULL, Start, (void *)&t_args) != 0)
                 printf("Failed to create thread\n");
-            if (pthread_create(&threads[i++], NULL, DrawnNumbers, (void *)&t_args) != 0)
-                printf("Failed to create thread\n");
-        }
+                }
         catch (...)
         {
             std::cout << "Error\n";

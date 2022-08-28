@@ -144,7 +144,7 @@ void Client::MainLoop()
             break;
         case WON:
             std::cout << "{WON}" << std::endl;
-            SendMessage(text::WON.append(delimiter));
+            SendMessage(text::WON_REPLY.append(delimiter));
             break;
         default:
             std::cout << "InValide Action '" << action << "'" << std::endl;
